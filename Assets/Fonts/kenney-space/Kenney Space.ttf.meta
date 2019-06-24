@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 4fcec8e1150320b47a5ba0d61064bc5b
+guid: feba3eeb106108b4e916b2e251e22952
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -8,9 +8,9 @@ TrueTypeFontImporter:
   characterSpacing: 0
   characterPadding: 1
   includeFontData: 1
-  fontName: Halo
+  fontName: Kenney Space
   fontNames:
-  - Halo
+  - Kenney Space
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0
