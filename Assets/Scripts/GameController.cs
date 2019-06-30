@@ -14,43 +14,44 @@ public class GameController : MonoBehaviour
     //Class Variables
     public GameObject backgroundSprite;
     public GameObject playerShip;
-    public Text gameOver;
-    public Text restartText;
-    public Text quitText;
-    public GameObject backgroundCapsule;
-    public Text LoseText;
     public GameObject hazard;
-    public Vector3 SpawnValues;
-    public Text scoreDisplay;
-    public Button quitButton;
-    public Button restartButton;
-    public Image restartButtonImage;
-    public Image quitButtonImage;
     public GameObject PauseMenu;
     public GameObject pauseButton;
     public GameObject HighScore;
 
+    public Text GameOverText;
+    public Text restartText;
+    public Text quitText;
+    public Text LoseText;
+    public Text scoreDisplay;
+
+    public Vector3 SpawnValues;
+    
+    public Button quitButton;
+    public Button restartButton;
+
+    public Image restartButtonImage;
+    public Image quitButtonImage;
    
     [HideInInspector] public bool gameOverFlag = false;
     [HideInInspector] public static bool pauseFlag = false;
-    [HideInInspector] public static bool raiseSpeedFlag = true;
 
     private int asteroidShootScore = 10;
-    private int SCORE = 0;
+    private int Score = 0;
     private float winningScore = Mathf.Infinity;
     private Quaternion spawnRotation;
     private Vector3 spawnPositon;
     private WaitForSeconds asteroidWait;
     private WaitForSeconds backgroundWait;
     private GameObject[] asteroids = new GameObject[20];
-    private bool muteFlag = false;
+    private bool Muted = false;
     
 
 
     private void Awake()
     {
         Time.timeScale = 1f;
-        //PlayerPrefs.SetInt("High Score", SCORE);
+        //PlayerPrefs.SetInt("High Score", Score);
               
     }
 
@@ -65,8 +66,8 @@ public class GameController : MonoBehaviour
     {
         HighScore.GetComponent<Text>().text = "High Score: " + PlayerPrefs.GetInt("High Score").ToString();
 
-        scoreDisplay.text = "Score: " + System.Convert.ToString(SCORE);
-        if (SCORE >= winningScore)
+        scoreDisplay.text = "Score: " + System.Convert.ToString(Score);
+        if (Score >= winningScore)
         {
             gameOverFlag = true;
             Mover.flag = true; //static GameOver Flag in the Mover script. 
@@ -75,7 +76,7 @@ public class GameController : MonoBehaviour
 
         if (gameOverFlag == true)
         {
-            Invoke("GAMEOVER", 0);
+            Invoke("GameOver", 0);
         }
 
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -139,8 +140,8 @@ public class GameController : MonoBehaviour
     }
 
     public void restart()
-        {
-            SceneManager.LoadScene("Main");
+    {
+        SceneManager.LoadScene(1);
         if (Time.timeScale == 0f)
         {
             Time.timeScale = 1f;
@@ -150,7 +151,7 @@ public class GameController : MonoBehaviour
             pauseFlag = false;
         }
 
-        }
+    }
 
     public void pauseGame()
     {
@@ -162,8 +163,6 @@ public class GameController : MonoBehaviour
             gameObject.GetComponent<AudioSource>().Pause();
             pauseButton.GetComponent<Image>().enabled = false;
         }
-        
-
 
     }
 
@@ -186,74 +185,55 @@ public class GameController : MonoBehaviour
         Application.Quit();
     }
 
-    public void GAMEOVER()
+    public void GameOver()
     {
-        if (PlayerPrefs.GetInt("High Score") < SCORE )
-        {
-            PlayerPrefs.SetInt("High Score", SCORE);
-        }
-        
-        gameOver.enabled = true;
-        pauseButton.GetComponent<Image>().enabled = false;
+        SetHighScore();
 
-        if (SCORE < 200)
-        {
-            LoseText.enabled = true;
-        }
-        else if (200 <= SCORE && SCORE < 700)
-        {
+        if (Score < 700)
             LoseText.text = "NOT BAD";
-            LoseText.enabled = true;
-        }
-        else if (700 <= SCORE && SCORE < 1000)
-        {
+        else if (Score < 1000)
             LoseText.text = "NOICE!";
-            LoseText.enabled = true;
-        }
-        else if (1000 <= SCORE && SCORE < 3000)
-        {
+        else if (Score <= 3000)
             LoseText.text = "DAMN SON!";
-            LoseText.enabled = true;
-        }
-        else if (SCORE > 3000 )
+        else if (Score > 3000 )
         {
             LoseText.text = "HOTDAMN! YOU WIN!";
-            LoseText.color = new Color(255f, 0f, 0f);
-            LoseText.enabled = true;
+            LoseText.color = new Color(250f, 0f, 70f);
         }
+
+        pauseButton.GetComponent<Image>().enabled = false;
+
+        GameOverText.enabled = true;
+        LoseText.enabled = true;
+        
         restartButtonImage.enabled = true;
         restartText.enabled = true;
+
         quitButtonImage.enabled = true;
         quitText.enabled = true;
-
-
     }
 
-    public void scoreUpdate()
+    private void SetHighScore()
     {
-        SCORE += asteroidShootScore;
+        if (PlayerPrefs.GetInt("High Score") < Score)
+        {
+            PlayerPrefs.SetInt("High Score", Score);
+        }
     }
 
-    public void scoreUpdate(bool dropScore)
+    public void scoreUpdate(bool AddToScore = true)
     {
-        SCORE -= asteroidShootScore;
+        Score = AddToScore ? Score + asteroidShootScore : Score - asteroidShootScore;
     }
 
     public int GetScore()
     {
-        return SCORE;
+        return Score;
     }
 
-    public void turnOffMusic()
+    public void Mute()
     {
-        if (muteFlag)
-        {
-            AudioListener.volume = 1.0f;
-        }
-        else if (!muteFlag)
-        {
-            AudioListener.volume = 0.0f;
-        }
-        muteFlag = !muteFlag;
+        AudioListener.volume = Muted ? 1.0f : 0.0f;
+        Muted = !Muted;
     }
 }

@@ -51,11 +51,11 @@ public class PlayerController : MonoBehaviour {
 
         rb.velocity = new Vector3(moveHorizontal*speed, 0.0f, 0.0f);
         rb.position = new Vector3
-            (
+        (
             Mathf.Clamp(rb.position.x, boundary.xMin, boundary.xMax), 
             0.0f, 
             Mathf.Clamp(rb.position.z, boundary.zMin, boundary.zMax)
-            );
+        );
 
         rotate = new Vector3(0.0f, 0.0f, rb.velocity.x);
         rb.rotation = Quaternion.Euler(rotate*(-tilt));

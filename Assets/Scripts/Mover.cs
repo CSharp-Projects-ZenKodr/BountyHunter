@@ -21,6 +21,10 @@ public class Mover : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         rb.velocity = transform.forward * speed;
         controller = FindObjectOfType<GameController>();
+        if (controller != null)
+        {
+            Debug.Log("Controller found");
+        }
     }
     private void Update()
     {
@@ -33,8 +37,8 @@ public class Mover : MonoBehaviour
         {
             if (gameObject.tag == "Asteroid")
             {
-                if (!flag)//if the game is not over and the asteroid moves out of bounds, the score drops by gameController.asteroidShootScore
-                {
+                if (!flag)
+                {//if the game is not over and the asteroid moves out of bounds, the score drops by gameController.asteroidShootScore
                     controller.scoreUpdate(false);
                 }
             }

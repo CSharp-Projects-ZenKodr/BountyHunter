@@ -5,16 +5,11 @@ using UnityEngine;
 /*
 APPLIED TO:
     Explosion Animations
- 
 */
 
 public class DestroyByTime : MonoBehaviour {
 
-    public float destroyTime = 1.0f; 
+    public float destroyTime = 1.0f;
 
-	void Start () {
-        Destroy(gameObject, destroyTime);
-	}
-	
-	
+    void Start () { Destroy(gameObject, destroyTime); }
 }

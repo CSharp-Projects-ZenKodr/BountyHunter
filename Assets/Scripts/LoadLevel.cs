@@ -5,18 +5,11 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 /*
  Applied to:
- Arbitrary Name GameObject
+    LevelLoader
  */
 
 public class LoadLevel : MonoBehaviour {
 
-    public void playTheGame()
-        {
-            SceneManager.LoadScene(1);
-            
-        }
-    public void QuitTheGame()
-    {
-        Application.Quit();
-    }
+    public void Play() { SceneManager.LoadScene(1); } 
+    public void Quit() { Application.Quit(); }
 }

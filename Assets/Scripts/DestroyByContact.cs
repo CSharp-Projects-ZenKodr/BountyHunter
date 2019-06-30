@@ -30,14 +30,15 @@ public class DestroyByContact : MonoBehaviour {
     private void OnTriggerEnter(Collider other)
     {
         
-        if (other.tag == "Bound"){return;}
-        if (other.tag == "Asteroid"){return;}
+        if (other.tag == "Bound") { return; }
+        if (other.tag == "Asteroid") { return; }
 
     	if (other.tag == "Player")
         {
-            Destroy(other.gameObject);
+            
             Destroy(gameObject);
             Instantiate(playerExplosion, other.transform.position, other.transform.rotation);
+            Destroy(other.gameObject);
             BackgroundMotion.flag = true;
             controller.gameOverFlag = true;
         }
@@ -46,14 +47,8 @@ public class DestroyByContact : MonoBehaviour {
             Instantiate(asteroidExplosion, transform.position, transform.rotation);
             Destroy(gameObject);
             controller.scoreUpdate();
-            if (!System.Convert.ToBoolean(controller.GetScore() % 100))
-            {
-                GameController.raiseSpeedFlag = true;
-
-            }
-
+            
         }
-
     }
 
     

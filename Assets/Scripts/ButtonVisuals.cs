@@ -10,26 +10,25 @@ using UnityEngine.UI;
 
 public class ButtonVisuals : MonoBehaviour {
 
-    public Image soundOn;
-    public Image muted;
-    public GameController controller;
+    public Image UnMuted;
+    public Image Muted;
 
     private void Update()
     {
-        swapIcons();
+        ChangeIcon();
     }
 
-    public void swapIcons()
+    public void ChangeIcon()
     {
         if (AudioListener.volume == 0.0f)
         {
-            soundOn.enabled = false;
-            muted.enabled = true;
+            UnMuted.enabled = false;
+            Muted.enabled = true;
         }
         else if (AudioListener.volume == 1.0f)
         {
-            muted.enabled = false;
-            soundOn.enabled = true;
+            Muted.enabled = false;
+            UnMuted.enabled = true;
         }
     }
 }
