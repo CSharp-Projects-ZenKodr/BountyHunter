@@ -20,13 +20,11 @@ public class ButtonVisuals : MonoBehaviour {
 
     public void ChangeIcon()
     {
-        if (AudioListener.volume == 0.0f)
-        {
+        if (AudioListener.volume == 0.0f) {
             UnMuted.enabled = false;
             Muted.enabled = true;
         }
-        else if (AudioListener.volume == 1.0f)
-        {
+        else if (AudioListener.volume == 1.0f) {
             Muted.enabled = false;
             UnMuted.enabled = true;
         }

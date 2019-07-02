@@ -26,10 +26,6 @@ public class Mover : MonoBehaviour
             Debug.Log("Controller found");
         }
     }
-    private void Update()
-    {
-        flag = controller.gameOverFlag;
-    }
 
     private void OnTriggerExit(Collider other)
     {
@@ -37,7 +33,7 @@ public class Mover : MonoBehaviour
         {
             if (gameObject.tag == "Asteroid")
             {
-                if (!flag)
+                if (!GameController.GameOverFlag)
                 {//if the game is not over and the asteroid moves out of bounds, the score drops by gameController.asteroidShootScore
                     controller.scoreUpdate(false);
                 }

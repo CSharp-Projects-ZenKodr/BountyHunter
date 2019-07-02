@@ -33,8 +33,8 @@ public class GameController : MonoBehaviour
     public Image restartButtonImage;
     public Image quitButtonImage;
    
-    [HideInInspector] public bool gameOverFlag = false;
-    [HideInInspector] public static bool pauseFlag = false;
+    [HideInInspector] public static bool GameOverFlag = false;
+    [HideInInspector] public static bool PauseFlag = false;
 
     private int asteroidShootScore = 10;
     private int Score = 0;
@@ -57,7 +57,7 @@ public class GameController : MonoBehaviour
 
     private void Start()
     {
-        pauseFlag = false;
+        PauseFlag = false;
         gameObject.GetComponent<AudioSource>().Play();
         AsteroidPool();
     }
@@ -69,19 +69,19 @@ public class GameController : MonoBehaviour
         scoreDisplay.text = "Score: " + System.Convert.ToString(Score);
         if (Score >= winningScore)
         {
-            gameOverFlag = true;
+            GameOverFlag = true;
             Mover.flag = true; //static GameOver Flag in the Mover script. 
             
         }
 
-        if (gameOverFlag == true)
+        if (GameOverFlag == true)
         {
             Invoke("GameOver", 0);
         }
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            switch (pauseFlag)
+            switch (PauseFlag)
             {
                 case true:
                     resumeGame();
@@ -118,7 +118,7 @@ public class GameController : MonoBehaviour
     {
         foreach (GameObject asteroid in asteroids)
         {
-            if(!gameOverFlag)
+            if(!GameOverFlag)
             {
                 asteroidWait = new WaitForSeconds(Random.Range(0.3f, 1.75f));
                 spawnPositon = new Vector3(Random.Range(-SpawnValues.x, SpawnValues.x), SpawnValues.y, SpawnValues.z);
@@ -132,7 +132,7 @@ public class GameController : MonoBehaviour
                 yield return asteroidWait;
             }
         }
-        if (!gameOverFlag)
+        if (!GameOverFlag)
         {
             AsteroidPool();
         }
@@ -146,20 +146,20 @@ public class GameController : MonoBehaviour
         {
             Time.timeScale = 1f;
         }
-        if (pauseFlag == true)
+        if (PauseFlag == true)
         {
-            pauseFlag = false;
+            PauseFlag = false;
         }
 
     }
 
     public void pauseGame()
     {
-        if (!gameOverFlag)
+        if (!GameOverFlag)
         {
             PauseMenu.SetActive(true);
             Time.timeScale = 0f;
-            pauseFlag = true;
+            PauseFlag = true;
             gameObject.GetComponent<AudioSource>().Pause();
             pauseButton.GetComponent<Image>().enabled = false;
         }
@@ -171,7 +171,7 @@ public class GameController : MonoBehaviour
         pauseButton.GetComponent<Image>().enabled = true;
         PauseMenu.SetActive(false);
         Time.timeScale = 1f;
-        pauseFlag = false;
+        PauseFlag = false;
         gameObject.GetComponent<AudioSource>().Play();
     }
 
