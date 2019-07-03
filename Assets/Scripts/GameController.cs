@@ -11,168 +11,112 @@ APPLIED TO:
 
 public class GameController : MonoBehaviour
 {
-    //Class Variables
-    public GameObject backgroundSprite;
-    public GameObject playerShip;
-    public GameObject hazard;
-    public GameObject PauseMenu;
-    public GameObject pauseButton;
-    public GameObject HighScore;
-
-    public Text GameOverText;
-    public Text restartText;
-    public Text quitText;
-    public Text LoseText;
-    public Text scoreDisplay;
-
+    public GameObject PauseMenuScreen, GameOverScreen, GameUIScreen;
+    public GameObject Hazard;
     public Vector3 SpawnValues;
+    public Vector3 AsteroidPoolPosition; /*new Vector3(60f, -2f, -1.5f);*/
     
-    public Button quitButton;
-    public Button restartButton;
+    public static bool GameOverFlag, PauseFlag;
+    public bool Muted;
 
-    public Image restartButtonImage;
-    public Image quitButtonImage;
-   
-    [HideInInspector] public static bool GameOverFlag = false;
-    [HideInInspector] public static bool PauseFlag = false;
-
-    private int asteroidShootScore = 10;
-    private int Score = 0;
-    private float winningScore = Mathf.Infinity;
-    private Quaternion spawnRotation;
-    private Vector3 spawnPositon;
-    private WaitForSeconds asteroidWait;
-    private WaitForSeconds backgroundWait;
-    private GameObject[] asteroids = new GameObject[20];
-    private bool Muted = false;
-    
+    private AudioSource MusicSource;
+    private int AsteroidShootScore, PlayerScore;
+    private GameObject[] AsteroidsPool;
 
 
+    //Class Methods
     private void Awake()
     {
         Time.timeScale = 1f;
-        //PlayerPrefs.SetInt("High Score", Score);
-              
+        GameOverFlag = PauseFlag = Muted = false;
+        PlayerScore = 0;
+        AsteroidShootScore = 10;
+        AsteroidsPool = new GameObject[20];
+        PlayerPrefs.SetInt("High Score", PlayerScore);
+        MusicSource = GetComponent<AudioSource>();
     }
 
     private void Start()
     {
-        PauseFlag = false;
-        gameObject.GetComponent<AudioSource>().Play();
+        MusicSource.Play();
+
+        GameUIScreen.SetActive(true);
+        GameOverScreen.SetActive(false);
+        PauseMenuScreen.SetActive(false);
+
         AsteroidPool();
     }
 
     private void Update()
     {
-        HighScore.GetComponent<Text>().text = "High Score: " + PlayerPrefs.GetInt("High Score").ToString();
-
-        scoreDisplay.text = "Score: " + System.Convert.ToString(Score);
-        if (Score >= winningScore)
         {
-            GameOverFlag = true;
-            Mover.flag = true; //static GameOver Flag in the Mover script. 
-            
+            Text temp = GameUIScreen.transform.GetChild(0).GetComponent<Text>();
+            temp.text = "Score: " + System.Convert.ToString(PlayerScore);
         }
 
-        if (GameOverFlag == true)
-        {
-            Invoke("GameOver", 0);
-        }
+        if (GameOverFlag)
+            GameOver();
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            switch (PauseFlag)
-            {
-                case true:
-                    resumeGame();
-                    break;
-                case false:
-                    pauseGame();
-                    break;
-            }
+            if (PauseFlag) { ResumeGame(); }
+            else { PauseGame(); } 
         }
-
-        
     }
 
     void AsteroidPool()
     {
-        Vector3 spawn = new Vector3(60f, -2f, -1.5f);
-        for (int i = 0; i < 20; i++)
-        {
-            asteroids[i] = Instantiate(hazard, spawn, Quaternion.identity);
-            asteroids[i].GetComponent<Mover>().enabled = false;
-        }
+        int AsteroidsCount = 20;
+
+        for (int i = 0; i < AsteroidsCount; i++)
+            AsteroidsPool[i] = Instantiate(Hazard, AsteroidPoolPosition, Quaternion.identity);
+
         StartCoroutine(SpawnWaves());
-        
-    }
-
-    private IEnumerator GenerateBackground()
-    {
-        backgroundWait = new WaitForSeconds(5);
-        yield return backgroundWait;
-
     }
 
     IEnumerator SpawnWaves()
     {
-        foreach (GameObject asteroid in asteroids)
+        foreach (GameObject asteroid in AsteroidsPool)
         {
             if(!GameOverFlag)
             {
-                asteroidWait = new WaitForSeconds(Random.Range(0.3f, 1.75f));
-                spawnPositon = new Vector3(Random.Range(-SpawnValues.x, SpawnValues.x), SpawnValues.y, SpawnValues.z);
-                spawnRotation = Quaternion.identity;
-
-                asteroid.transform.position = spawnPositon;
-                asteroid.transform.rotation = spawnRotation;
+                WaitForSeconds AsteroidWait = new WaitForSeconds(Random.Range(0.3f, 1.75f));
+                asteroid.transform.position = new Vector3(Random.Range(-SpawnValues.x, SpawnValues.x), SpawnValues.y, SpawnValues.z);
+                asteroid.transform.rotation = Quaternion.identity;
                 asteroid.GetComponent<Mover>().enabled = true;
-                
-
-                yield return asteroidWait;
+                yield return AsteroidWait;
             }
         }
         if (!GameOverFlag)
-        {
             AsteroidPool();
-        }
 
     }
 
-    public void restart()
+    public void RestartGame()
     {
         SceneManager.LoadScene(1);
-        if (Time.timeScale == 0f)
-        {
-            Time.timeScale = 1f;
-        }
-        if (PauseFlag == true)
-        {
-            PauseFlag = false;
-        }
-
     }
 
-    public void pauseGame()
+    public void PauseGame()
     {
         if (!GameOverFlag)
         {
-            PauseMenu.SetActive(true);
+            PauseMenuScreen.SetActive(true);
+            GameUIScreen.SetActive(false);
             Time.timeScale = 0f;
             PauseFlag = true;
-            gameObject.GetComponent<AudioSource>().Pause();
-            pauseButton.GetComponent<Image>().enabled = false;
+            MusicSource.Pause();
         }
 
     }
 
-    public void resumeGame()
+    public void ResumeGame()
     {
-        pauseButton.GetComponent<Image>().enabled = true;
-        PauseMenu.SetActive(false);
+        PauseMenuScreen.SetActive(false);
+        GameUIScreen.SetActive(true);
         Time.timeScale = 1f;
         PauseFlag = false;
-        gameObject.GetComponent<AudioSource>().Play();
+        MusicSource.Play();
     }
 
     public void BackToMainMenu()
@@ -180,7 +124,7 @@ public class GameController : MonoBehaviour
         SceneManager.LoadScene(0);
     }
 
-    public void quitTheGame()
+    public void QuitGame()
     {
         Application.Quit();
     }
@@ -189,51 +133,57 @@ public class GameController : MonoBehaviour
     {
         SetHighScore();
 
-        if (Score < 700)
-            LoseText.text = "NOT BAD";
-        else if (Score < 1000)
-            LoseText.text = "NOICE!";
-        else if (Score <= 3000)
-            LoseText.text = "DAMN SON!";
-        else if (Score > 3000 )
+        Text GameOverMessage = GameOverScreen.transform.GetChild(1).GetComponent<Text>();
+
+        if (PlayerScore == PlayerPrefs.GetInt("High Score"))
         {
-            LoseText.text = "HOTDAMN! YOU WIN!";
-            LoseText.color = new Color(250f, 0f, 70f);
+            GameOverMessage.text = "HIGH SCORE!";
+        }
+        else
+        {
+            if (PlayerScore < 700)
+                GameOverMessage.text = "Not bad";
+            else if (PlayerScore < 1500)
+                GameOverMessage.text = "Pshttt you got lucky";
+            else if (PlayerScore <= 3000)
+                GameOverMessage.text = "DAMN SON!";
+            else if (PlayerScore > 3000)
+            {
+                GameOverMessage.text = "HOTDAMN! YOU WIN!";
+                GameOverMessage.color = new Color(250f, 0f, 70f);
+            }
         }
 
-        pauseButton.GetComponent<Image>().enabled = false;
-
-        GameOverText.enabled = true;
-        LoseText.enabled = true;
-        
-        restartButtonImage.enabled = true;
-        restartText.enabled = true;
-
-        quitButtonImage.enabled = true;
-        quitText.enabled = true;
+        PauseMenuScreen.SetActive(false);
+        GameUIScreen.SetActive(false);
+        GameOverScreen.SetActive(true);
+        GameOverFlag = true;
     }
 
     private void SetHighScore()
     {
-        if (PlayerPrefs.GetInt("High Score") < Score)
-        {
-            PlayerPrefs.SetInt("High Score", Score);
+        if (PlayerPrefs.GetInt("High Score") < PlayerScore)
+        { //Set High score. Update High Score on Game screen. 
+            PlayerPrefs.SetInt("High Score", PlayerScore);
+            Text temp = GameUIScreen.transform.GetChild(1).GetComponent<Text>();
+            temp.text = "High Score: " + PlayerPrefs.GetInt("High Score").ToString();
         }
     }
 
-    public void scoreUpdate(bool AddToScore = true)
+    public void ScoreUpdate(bool AddToScore = true)
     {
-        Score = AddToScore ? Score + asteroidShootScore : Score - asteroidShootScore;
+        PlayerScore = AddToScore ? PlayerScore + AsteroidShootScore : PlayerScore - AsteroidShootScore;
     }
 
     public int GetScore()
     {
-        return Score;
+        return PlayerScore;
     }
 
     public void Mute()
     {
-        AudioListener.volume = Muted ? 1.0f : 0.0f;
+        MusicSource.volume = Muted ? 1.0f : 0.0f;
+        //AudioListener.volume = Muted ? 1.0f : 0.0f;
         Muted = !Muted;
     }
 }

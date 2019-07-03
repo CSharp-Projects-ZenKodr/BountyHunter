@@ -29,11 +29,11 @@ public class DestroyByContact : MonoBehaviour {
         if (other.tag == "Asteroid") { return; }
     	if (other.tag == "Player") {
             Instantiate(PlayerExplosion, other.transform.position, other.transform.rotation);
-            controller.GameOverFlag = true;
+            GameController.GameOverFlag = true;
         }
         else {  //Bullet hits asteroid 
             Instantiate(AsteroidExplosion, transform.position, transform.rotation);
-            controller.scoreUpdate();
+            controller.ScoreUpdate();
         }
 
         Destroy(other.gameObject);
