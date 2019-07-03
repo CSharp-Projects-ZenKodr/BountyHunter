@@ -19,7 +19,8 @@ public class DestroyByContact : MonoBehaviour {
     private Vector3 default_position;
 
     //Class Methods
-    private void Awake() {
+    private void Awake()
+    {
         controller = FindObjectOfType<GameController>();
     }
 
