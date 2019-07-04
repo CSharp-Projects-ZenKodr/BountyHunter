@@ -16,48 +16,59 @@ public class Boundary
 public class PlayerController : MonoBehaviour {
 
     // Class Variables 
-    private Rigidbody rb;
+    private Rigidbody RigidBody;
     private Vector3 rotate;
-    private float myTime = 0.0f;
-    private float moveHorizontal;
-    private float speed = 297.14f;
-    private float tilt = 0.5f;
-    private float shotDiff = 0.15f;
-
+    private float MyTime, MoveHorizontal, Speed, Tilt, ShotDiff;
     public Boundary boundary;
     public GameObject shot;
     public Transform shotSpawn;
 
-
     //Class Methods
 
-    private void Awake()
+    private void Start()
     {
-        rb = GetComponent<Rigidbody>();
+        Tilt = 0.5f;
+        MyTime = 0.0f;
+        Speed = 297.14f;
+        ShotDiff = 0.15f;
+        RigidBody = GetComponent<Rigidbody>();
     }
+
     private void Update()
     {
-        if (Input.GetButton("Fire1") && Time.time > myTime) {
-            myTime = Time.time + shotDiff;
-            Instantiate(shot, shotSpawn.position, shotSpawn.rotation);
+        if (!GameController.GameOverFlag)
+        {
+            if (Input.GetButton("Fire1") && Time.time > MyTime && !GameController.PauseFlag)
+            {
+                MyTime = Time.time + ShotDiff;
+                Instantiate(shot, shotSpawn.position, shotSpawn.rotation);
+            }
+
+            {
+                ////Keyboard
+                //MoveHorizontal = Input.GetAxis("Horizontal");
+            }
+
+            {
+                //Android
+                MoveHorizontal = Input.acceleration.x;
+            }
             
         }
-        //moveHorizontal = Input.GetAxis("Horizontal");
-        moveHorizontal = Input.acceleration.x;
     }
 
     private void FixedUpdate()
     {
 
-        rb.velocity = new Vector3(moveHorizontal*speed, 0.0f, 0.0f);
-        rb.position = new Vector3
+        RigidBody.velocity = new Vector3(MoveHorizontal*Speed, 0.0f, 0.0f);
+        RigidBody.position = new Vector3
         (
-            Mathf.Clamp(rb.position.x, boundary.xMin, boundary.xMax), 
+            Mathf.Clamp(RigidBody.position.x, boundary.xMin, boundary.xMax), 
             0.0f, 
-            Mathf.Clamp(rb.position.z, boundary.zMin, boundary.zMax)
+            Mathf.Clamp(RigidBody.position.z, boundary.zMin, boundary.zMax)
         );
 
-        rotate = new Vector3(0.0f, 0.0f, rb.velocity.x);
-        rb.rotation = Quaternion.Euler(rotate*(-tilt));
+        rotate = new Vector3(0.0f, 0.0f, RigidBody.velocity.x);
+        RigidBody.rotation = Quaternion.Euler(rotate*(-Tilt));
     }
 }

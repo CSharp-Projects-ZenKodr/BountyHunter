@@ -25,19 +25,17 @@ public class GameController : MonoBehaviour
 
 
     //Class Methods
-    private void Awake()
+    private void Start()
     {
         Time.timeScale = 1f;
-        GameOverFlag = PauseFlag = Muted = false;
+
         PlayerScore = 0;
         AsteroidShootScore = 10;
         AsteroidsPool = new GameObject[20];
-        PlayerPrefs.SetInt("High Score", PlayerScore);
         MusicSource = GetComponent<AudioSource>();
-    }
 
-    private void Start()
-    {
+        GameOverFlag = PauseFlag = Muted = false;
+
         MusicSource.Play();
 
         GameUIScreen.SetActive(true);
@@ -135,23 +133,18 @@ public class GameController : MonoBehaviour
 
         Text GameOverMessage = GameOverScreen.transform.GetChild(1).GetComponent<Text>();
 
-        if (PlayerScore == PlayerPrefs.GetInt("High Score"))
+        if (PlayerScore == PlayerPrefs.GetInt("High Score") && PlayerScore != 0)
         {
             GameOverMessage.text = "HIGH SCORE!";
         }
         else
         {
-            if (PlayerScore < 700)
+            if (PlayerScore >= 500 && PlayerScore < 1500)
                 GameOverMessage.text = "Not bad";
-            else if (PlayerScore < 1500)
+            else if (PlayerScore >= 1500 && PlayerScore < 3000)
                 GameOverMessage.text = "Pshttt you got lucky";
-            else if (PlayerScore <= 3000)
+            else if (PlayerScore >= 3000)
                 GameOverMessage.text = "DAMN SON!";
-            else if (PlayerScore > 3000)
-            {
-                GameOverMessage.text = "HOTDAMN! YOU WIN!";
-                GameOverMessage.color = new Color(250f, 0f, 70f);
-            }
         }
 
         PauseMenuScreen.SetActive(false);
@@ -182,8 +175,7 @@ public class GameController : MonoBehaviour
 
     public void Mute()
     {
-        MusicSource.volume = Muted ? 1.0f : 0.0f;
-        //AudioListener.volume = Muted ? 1.0f : 0.0f;
+        AudioListener.volume = Muted ? 1.0f : 0.0f;
         Muted = !Muted;
     }
 }
