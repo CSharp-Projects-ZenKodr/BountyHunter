@@ -42,6 +42,8 @@ public class GameController : MonoBehaviour
         GameOverScreen.SetActive(false);
         PauseMenuScreen.SetActive(false);
 
+        SetHighScore();
+
         AsteroidPool();
     }
 
@@ -49,7 +51,7 @@ public class GameController : MonoBehaviour
     {
         {
             Text temp = GameUIScreen.transform.GetChild(0).GetComponent<Text>();
-            temp.text = "Score: " + System.Convert.ToString(PlayerScore);
+            temp.text = "Score: " + PlayerScore;
         }
 
         if (GameOverFlag)
@@ -156,11 +158,13 @@ public class GameController : MonoBehaviour
     private void SetHighScore()
     {
         if (PlayerPrefs.GetInt("High Score") < PlayerScore)
-        { //Set High score. Update High Score on Game screen. 
+        { //Set High score. 
             PlayerPrefs.SetInt("High Score", PlayerScore);
-            Text temp = GameUIScreen.transform.GetChild(1).GetComponent<Text>();
-            temp.text = "High Score: " + PlayerPrefs.GetInt("High Score").ToString();
         }
+
+        //Update High Score on Game screen. 
+        Text temp = GameUIScreen.transform.GetChild(1).GetComponent<Text>();
+        temp.text = "High Score: " + PlayerPrefs.GetInt("High Score").ToString();
     }
 
     public void ScoreUpdate(bool AddToScore = true)
