@@ -54,13 +54,14 @@ public class GameController : MonoBehaviour
             temp.text = "Score: " + PlayerScore;
         }
 
-        if (GameOverFlag)
-            GameOver();
+        if (GameOverFlag) { GameOver(); } 
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (PauseFlag) { ResumeGame(); }
-            else { PauseGame(); } 
+            if (PauseFlag)
+                ResumeGame(); 
+            else
+                PauseGame(); 
         }
     }
 
@@ -152,7 +153,7 @@ public class GameController : MonoBehaviour
         PauseMenuScreen.SetActive(false);
         GameUIScreen.SetActive(false);
         GameOverScreen.SetActive(true);
-        GameOverFlag = true;
+        GameOverFlag = true; //possibly useless. Check if removing break game.
     }
 
     private void SetHighScore()

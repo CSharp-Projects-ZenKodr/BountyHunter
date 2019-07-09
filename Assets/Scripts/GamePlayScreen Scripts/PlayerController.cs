@@ -59,7 +59,7 @@ public class PlayerController : MonoBehaviour {
 
     private void FixedUpdate()
     {
-
+        //Place all of this in a seperate function if possible
         RigidBody.velocity = new Vector3(MoveHorizontal*Speed, 0.0f, 0.0f);
         RigidBody.position = new Vector3
         (
@@ -71,4 +71,5 @@ public class PlayerController : MonoBehaviour {
         rotate = new Vector3(0.0f, 0.0f, RigidBody.velocity.x);
         RigidBody.rotation = Quaternion.Euler(rotate*(-Tilt));
     }
+
 }
