@@ -15,7 +15,8 @@ public class GameController : MonoBehaviour
     public GameObject Hazard;
     public Vector3 SpawnValues;
     public Vector3 AsteroidPoolPosition; /*new Vector3(60f, -2f, -1.5f);*/
-    
+    public GameObject[] Backgrounds;
+
     public static bool GameOverFlag, PauseFlag;
     public bool Muted;
 
@@ -41,6 +42,8 @@ public class GameController : MonoBehaviour
         GameUIScreen.SetActive(true);
         GameOverScreen.SetActive(false);
         PauseMenuScreen.SetActive(false);
+
+        SelectBackground();
 
         SetHighScore();
 
@@ -182,5 +185,12 @@ public class GameController : MonoBehaviour
     {
         AudioListener.volume = Muted ? 1.0f : 0.0f;
         Muted = !Muted;
+    }
+
+    private void SelectBackground()
+    {
+        int selected = Random.Range(0, 3);
+        for (int i = 0; i < Backgrounds.Length; i++)
+            Backgrounds[i].SetActive(i == selected ? true : false);
     }
 }
