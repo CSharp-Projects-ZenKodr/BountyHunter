@@ -18,10 +18,12 @@ public class PlayerController : MonoBehaviour {
     // Class Variables 
     private Rigidbody RigidBody;
     private Vector3 rotate;
-    private float MyTime, MoveHorizontal, Speed, Tilt, ShotDiff;
+    private float MyTime, MoveHorizontal, smoothingFactor, Speed, Tilt, ShotDiff;
     public Boundary boundary;
     public GameObject shot;
     public Transform shotSpawn;
+    private bool smooth;
+    public bool testMode;
 
     //Class Methods
 
@@ -29,9 +31,11 @@ public class PlayerController : MonoBehaviour {
     {
         Tilt = 0.5f;
         MyTime = 0.0f;
-        Speed = 297.14f;
+        Speed = 1000f; //magic number. 
         ShotDiff = 0.15f;
+        smooth = true;
         RigidBody = GetComponent<Rigidbody>();
+        testMode = false;
     }
 
     private void Update()
@@ -43,33 +47,50 @@ public class PlayerController : MonoBehaviour {
                 MyTime = Time.time + ShotDiff;
                 Instantiate(shot, shotSpawn.position, shotSpawn.rotation);
             }
-
+            if (!testMode)
+            {
+                MoveHorizontal = Input.acceleration.x;
+                smoothingFactor = Input.acceleration.y;
+            }
+            else
             {
                 ////Keyboard
-                //MoveHorizontal = Input.GetAxis("Horizontal");
+                MoveHorizontal = Input.GetAxis("Horizontal");
             }
-
-            {
-                //Android
-                MoveHorizontal = Input.acceleration.x;
-            }
-            
         }
     }
 
     private void FixedUpdate()
     {
-        //Place all of this in a seperate function if possible
-        RigidBody.velocity = new Vector3(MoveHorizontal*Speed, 0.0f, 0.0f);
+        AddForce();
+    }
+
+
+    private void AddForce()
+    {
+        if (smooth && !testMode)
+        {
+            RigidBody.velocity = new Vector3((MoveHorizontal * -smoothingFactor) * Speed, 0.0f, 0.0f);
+        }
+        else
+        {
+            RigidBody.velocity = new Vector3(MoveHorizontal * Speed, 0.0f, 0.0f);
+        }
+        
         RigidBody.position = new Vector3
         (
-            Mathf.Clamp(RigidBody.position.x, boundary.xMin, boundary.xMax), 
-            0.0f, 
+            Mathf.Clamp(RigidBody.position.x, boundary.xMin, boundary.xMax),
+            0.0f,
             Mathf.Clamp(RigidBody.position.z, boundary.zMin, boundary.zMax)
         );
 
         rotate = new Vector3(0.0f, 0.0f, RigidBody.velocity.x);
-        RigidBody.rotation = Quaternion.Euler(rotate*(-Tilt));
+        RigidBody.rotation = Quaternion.Euler(rotate * (-Tilt));
+    }
+
+    public void Smoothen()
+    {
+        smooth = !smooth;
     }
 
 }
