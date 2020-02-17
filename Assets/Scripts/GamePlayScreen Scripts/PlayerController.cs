@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 /*
 APPLIED TO:
     Player 
@@ -18,12 +19,14 @@ public class PlayerController : MonoBehaviour {
     // Class Variables 
     private Rigidbody RigidBody;
     private Vector3 rotate;
-    private float MyTime, MoveHorizontal, smoothingFactor, Speed, Tilt, ShotDiff;
+    private float MyTime, MoveHorizontal, MoveVertical, Speed, Tilt, ShotDiff;
     public Boundary boundary;
     public GameObject shot;
     public Transform shotSpawn;
     private bool smooth;
     public bool testMode;
+    public float default_x_val;
+    public float default_y_val;
 
     //Class Methods
 
@@ -31,11 +34,12 @@ public class PlayerController : MonoBehaviour {
     {
         Tilt = 0.5f;
         MyTime = 0.0f;
-        Speed = 750f; //magic number. 
+        Speed = 330f; //magic number. 
         ShotDiff = 0.15f;
-        smooth = true;
         RigidBody = GetComponent<Rigidbody>();
         testMode = false;
+        default_x_val = Input.acceleration.x;
+        default_y_val = Input.acceleration.y;
     }
 
     private void Update()
@@ -50,7 +54,7 @@ public class PlayerController : MonoBehaviour {
             if (!testMode)
             {
                 MoveHorizontal = Input.acceleration.x;
-                smoothingFactor = Input.acceleration.y;
+                MoveVertical = Input.acceleration.y;
             }
             else
             {
@@ -68,26 +72,30 @@ public class PlayerController : MonoBehaviour {
 
     private void AddForce()
     {
-        if (smooth && !testMode)
-        {
-            if (smoothingFactor < 0)
+        //Refactor this motion. Use physics equations and vectors.
+        // Also add slight motion in z axis for natural feel 
+        if (!testMode)
+        {//Android Controlls 
+
+            if (MoveVertical < default_y_val)
             {
-                RigidBody.velocity = new Vector3((MoveHorizontal * -smoothingFactor * Speed), 0f, 0f); 
-            } 
-            else if (smoothingFactor == 0)
-            {
-                RigidBody.velocity = new Vector3((MoveHorizontal * Speed * 0.1), 0.0f, 0.0f);
+                RigidBody.velocity = new Vector3((MoveHorizontal - default_x_val) * Speed * (float)Math.Cos(Math.PI / 4), 0f, -(MoveVertical - default_y_val) * Speed * (float)Math.Cos(Math.PI / 4));
+
             }
-            else if (smoothingFactor > 0)
+            else if (MoveHorizontal > default_y_val)
             {
-                RigidBody.velocity = new Vector3((MoveHorizontal * smoothingFactor) * Speed, 0.0f, 0.0f);
+                RigidBody.velocity = new Vector3((MoveHorizontal - default_x_val) * Speed * (float)Math.Cos(Math.PI / 4), 0f, -(MoveVertical - default_y_val) * Speed * (float)Math.Cos(Math.PI / 4));
+
+            }
+            else
+            {
+                RigidBody.velocity = new Vector3((MoveHorizontal - default_x_val) * Speed * (float)Math.Cos(Math.PI / 4), 0.0f, 0.0f);
             }
         }
         else
-        {
+        { //Keyboard controlls
             RigidBody.velocity = new Vector3(MoveHorizontal * Speed, 0.0f, 0.0f);
         }
-        
         RigidBody.position = new Vector3
         (
             Mathf.Clamp(RigidBody.position.x, boundary.xMin, boundary.xMax),
@@ -97,11 +105,6 @@ public class PlayerController : MonoBehaviour {
 
         rotate = new Vector3(0.0f, 0.0f, RigidBody.velocity.x);
         RigidBody.rotation = Quaternion.Euler(rotate * (-Tilt));
-    }
-
-    public void Smoothen()
-    {
-        smooth = !smooth;
     }
 
 }

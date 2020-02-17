@@ -55,6 +55,8 @@ public class GameController : MonoBehaviour
         {
             Text temp = GameUIScreen.transform.GetChild(0).GetComponent<Text>();
             temp.text = "Score: " + PlayerScore;
+            Text GameOverScreenScore = GameOverScreen.transform.GetChild(4).GetComponent<Text>();
+            GameOverScreenScore.text = PlayerScore.ToString() + " points";
         }
 
         if (GameOverFlag) { GameOver(); } 
@@ -173,7 +175,11 @@ public class GameController : MonoBehaviour
 
     public void ScoreUpdate(bool AddToScore = true)
     {
-        PlayerScore = AddToScore ? PlayerScore + AsteroidShootScore : PlayerScore - AsteroidShootScore;
+        if (!GameController.GameOverFlag)
+        {
+            PlayerScore = AddToScore ? PlayerScore + AsteroidShootScore : PlayerScore - AsteroidShootScore;
+        }
+        
     }
 
     public int GetScore()
