@@ -31,7 +31,7 @@ public class PlayerController : MonoBehaviour {
     {
         Tilt = 0.5f;
         MyTime = 0.0f;
-        Speed = 1000f; //magic number. 
+        Speed = 750f; //magic number. 
         ShotDiff = 0.15f;
         smooth = true;
         RigidBody = GetComponent<Rigidbody>();
