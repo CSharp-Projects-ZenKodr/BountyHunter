@@ -70,7 +70,18 @@ public class PlayerController : MonoBehaviour {
     {
         if (smooth && !testMode)
         {
-            RigidBody.velocity = new Vector3((MoveHorizontal * -smoothingFactor) * Speed, 0.0f, 0.0f);
+            if (smoothingFactor < 0)
+            {
+                RigidBody.velocity = new Vector3((MoveHorizontal * -smoothingFactor * Speed), 0f, 0f); 
+            } 
+            else if (smoothingFactor == 0)
+            {
+                RigidBody.velocity = new Vector3((MoveHorizontal * Speed * 0.1), 0.0f, 0.0f);
+            }
+            else if (smoothingFactor > 0)
+            {
+                RigidBody.velocity = new Vector3((MoveHorizontal * smoothingFactor) * Speed, 0.0f, 0.0f);
+            }
         }
         else
         {
