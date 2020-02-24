@@ -20,7 +20,7 @@ public class LoadLevel : MonoBehaviour {
     {
         if (fade_now && fade.color.a <= 1)
         {
-            fade.color = new Color(fade.color.r, fade.color.g, fade.color.b, fade.color.a + 0.05f);
+            fade.color = new Color(fade.color.r, fade.color.g, fade.color.b, fade.color.a + 0.0615f);
             if (fade.color.a >= 1.0f)
             {
                 LoadLevelNow = true; 

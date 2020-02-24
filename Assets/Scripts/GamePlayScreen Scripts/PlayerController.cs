@@ -75,22 +75,13 @@ public class PlayerController : MonoBehaviour {
         //Refactor this motion. Use physics equations and vectors.
         // Also add slight motion in z axis for natural feel 
         if (!testMode)
-        {//Android Controlls 
+        {//Android Controls 
 
-            if (MoveVertical < default_y_val)
-            {
-                RigidBody.velocity = new Vector3((MoveHorizontal - default_x_val) * Speed * (float)Math.Cos(Math.PI / 4), 0f, -(MoveVertical - default_y_val) * Speed * (float)Math.Cos(Math.PI / 4));
-
-            }
-            else if (MoveHorizontal > default_y_val)
-            {
-                RigidBody.velocity = new Vector3((MoveHorizontal - default_x_val) * Speed * (float)Math.Cos(Math.PI / 4), 0f, -(MoveVertical - default_y_val) * Speed * (float)Math.Cos(Math.PI / 4));
-
-            }
-            else
-            {
-                RigidBody.velocity = new Vector3((MoveHorizontal - default_x_val) * Speed * (float)Math.Cos(Math.PI / 4), 0.0f, 0.0f);
-            }
+            RigidBody.velocity = new Vector3(
+                (MoveHorizontal - default_x_val) * Speed * (float)Math.Cos(Math.PI / 4), 
+                0f, 
+                (MoveVertical - default_y_val) * Speed * (float)Math.Cos(Math.PI / 4)
+                );
         }
         else
         { //Keyboard controlls

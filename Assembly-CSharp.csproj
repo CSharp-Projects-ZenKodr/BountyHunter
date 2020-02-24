@@ -63,6 +63,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\GamePlayScreen Scripts\BGMover.cs" />
     <Compile Include="Assets\Scripts\GamePlayScreen Scripts\ButtonVisuals.cs" />
     <Compile Include="Assets\Scripts\GamePlayScreen Scripts\DestroyByContact.cs" />
     <Compile Include="Assets\Scripts\GamePlayScreen Scripts\DestroyByTime.cs" />
