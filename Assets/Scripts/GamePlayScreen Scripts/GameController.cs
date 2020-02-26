@@ -43,7 +43,7 @@ public class GameController : MonoBehaviour
         GameOverScreen.SetActive(false);
         PauseMenuScreen.SetActive(false);
 
-        SelectBackground();
+        //SelectBackground();
 
         SetHighScore();
 

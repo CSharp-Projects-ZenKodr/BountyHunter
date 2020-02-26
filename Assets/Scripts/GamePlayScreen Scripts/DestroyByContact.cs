@@ -26,7 +26,7 @@ public class DestroyByContact : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Bound") { return; }
+        if (other.tag == "Bound" || other.tag == "Background") { return; }
         if (other.tag == "Asteroid") { return; }
     	if (other.tag == "Player") {
             Instantiate(PlayerExplosion, other.transform.position, other.transform.rotation);
@@ -36,7 +36,6 @@ public class DestroyByContact : MonoBehaviour {
             Instantiate(AsteroidExplosion, transform.position, transform.rotation);
             controller.ScoreUpdate();
         }
-
         Destroy(other.gameObject);
         Destroy(gameObject);
     }
