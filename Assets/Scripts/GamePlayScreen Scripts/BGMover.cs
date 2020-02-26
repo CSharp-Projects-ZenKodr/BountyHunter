@@ -5,27 +5,47 @@ using UnityEngine;
 public class BGMover : MonoBehaviour
 {
     // Start is called before the first frame update
-    Transform SpawnLoc;
+    public Transform SpawnLoc;
+    private int RepositionCount;
+    public float BGSpeed;
 
-    private void Awake()
+    private void Start()
     {
-        SpawnLoc = transform;
+        RepositionCount = 0;
+        BGSpeed = 0.1f;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z - 0.1f);
-
-        //Debug.Log(transform.position);
+        transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z - BGSpeed);
     }
-    private void OnTriggerEnter(Collider other)
+    private void FixedUpdate()
     {
-        Debug.Log("Trigger Inbound");
+        if (RepositionCount >= 1)
+        {
+            if (RepositionCount == 3)
+            {
+                transform.position = SpawnLoc.position;
+                RepositionCount = 0;
+            }
+            else
+            {
+                RepositionCount += 1;
+            }
+        }
     }
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    Debug.Log("Trigger Inbound");
+    //    Instantiate(gameObject, SpawnLoc.position, SpawnLoc.rotation);
+    //}
     private void OnTriggerExit(Collider other)
     {
-        //Debug.Log("Trigger Inbound");
-        Instantiate(gameObject, SpawnLoc);
+        if (other.tag == "Bound")
+        {
+            RepositionCount = 1;
+            Debug.Log("destroyCount Set.");
+        }
+        
     }
 }
