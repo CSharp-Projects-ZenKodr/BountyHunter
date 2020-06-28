@@ -70,6 +70,7 @@
     <Compile Include="Assets\Scripts\GamePlayScreen Scripts\GameController.cs" />
     <Compile Include="Assets\Scripts\GamePlayScreen Scripts\Mover.cs" />
     <Compile Include="Assets\Scripts\GamePlayScreen Scripts\PlayerController.cs" />
+    <Compile Include="Assets\Scripts\GamePlayScreen Scripts\PlayerShoot.cs" />
     <Compile Include="Assets\Scripts\GamePlayScreen Scripts\RandomRotator.cs" />
     <Compile Include="Assets\Scripts\MainMenuScreen Scripts\LoadLevel.cs" />
     <Compile Include="Assets\Scripts\MainMenuScreen Scripts\MainMenuController.cs" />
