@@ -76,6 +76,7 @@
     <Compile Include="Assets\Scripts\MainMenuScreen Scripts\MainMenuController.cs" />
     <None Include="Assets\Space Shooter SpaceShip\Info.txt" />
     <None Include="Assets\Fonts\kenney-space\License.txt" />
+    <None Include="Assets\Audio\bg_music_credits.txt" />
     <Reference Include="com.unity.multiplayer-hlapi.Editor">
       <HintPath>E:/Documents/GitHub/BountyHunter/Library/ScriptAssemblies/com.unity.multiplayer-hlapi.Editor.dll</HintPath>
     </Reference>

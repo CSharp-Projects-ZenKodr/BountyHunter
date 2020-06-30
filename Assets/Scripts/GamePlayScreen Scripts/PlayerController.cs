@@ -25,8 +25,11 @@ public class PlayerController : MonoBehaviour {
     
     Rigidbody rb;
     Vector3 rotate;
-    [SerializeField]
-    float speed;  
+    [SerializeField] [Range (100, 300)]
+    int horizontalSpeed = 100;
+    [SerializeField] [Range(75, 225)]
+    int verticalSpeed = 75;
+    float c = 1;
     float tilt;
     public Boundary boundary;
     float defaultValueVertical;
@@ -37,11 +40,10 @@ public class PlayerController : MonoBehaviour {
 
     private void Start()
     {
-        tilt = 0.5f;
+        tilt = 1.5f;
         rb = GetComponent<Rigidbody>();
         if (Application.platform == RuntimePlatform.Android)
         {
-            speed *= 5; //speed up the spaceship when in android
             defaultValueVertical = Input.acceleration.y;
         }
     }
@@ -78,7 +80,11 @@ public class PlayerController : MonoBehaviour {
         rb.velocity = Vector3.right * horizontalAxis + Vector3.forward * verticalAxis;
         rb.velocity.Normalize();
 
-        rb.velocity *= speed;
+        //rb.velocity *= horizontalSpeed;
+
+        rb.velocity = new Vector3(rb.velocity.x * horizontalSpeed,
+                                    0,
+                                  rb.velocity.z * verticalSpeed);
 
         rb.position = new Vector3
         (
