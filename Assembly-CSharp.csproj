@@ -70,11 +70,13 @@
     <Compile Include="Assets\Scripts\GamePlayScreen Scripts\GameController.cs" />
     <Compile Include="Assets\Scripts\GamePlayScreen Scripts\Mover.cs" />
     <Compile Include="Assets\Scripts\GamePlayScreen Scripts\PlayerController.cs" />
+    <Compile Include="Assets\Scripts\GamePlayScreen Scripts\PlayerShoot.cs" />
     <Compile Include="Assets\Scripts\GamePlayScreen Scripts\RandomRotator.cs" />
     <Compile Include="Assets\Scripts\MainMenuScreen Scripts\LoadLevel.cs" />
     <Compile Include="Assets\Scripts\MainMenuScreen Scripts\MainMenuController.cs" />
     <None Include="Assets\Space Shooter SpaceShip\Info.txt" />
     <None Include="Assets\Fonts\kenney-space\License.txt" />
+    <None Include="Assets\Audio\bg_music_credits.txt" />
     <Reference Include="com.unity.multiplayer-hlapi.Editor">
       <HintPath>D:/Documents/GitHub/BountyHunter/Library/ScriptAssemblies/com.unity.multiplayer-hlapi.Editor.dll</HintPath>
     </Reference>
